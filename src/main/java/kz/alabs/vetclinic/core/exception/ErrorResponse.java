@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Getter
@@ -16,7 +17,7 @@ import java.util.Objects;
 public class ErrorResponse {
 
     private final int status;
-    private final String message;
+    private final Map<String, String> messages;
     private String stackTrace;
     private List<ValidationError> errors;
 
