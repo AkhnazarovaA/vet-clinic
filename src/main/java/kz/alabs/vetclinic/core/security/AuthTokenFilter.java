@@ -15,8 +15,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static kz.alabs.vetclinic.core.util.Constants.CANNOT_SET_AUTH;
-
 @Slf4j
 public class AuthTokenFilter extends OncePerRequestFilter {
 
@@ -48,7 +46,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            log.error(CANNOT_SET_AUTH, e);
+            log.error("Cannot set authorization", e);
         }
         filterChain.doFilter(request, response);
     }

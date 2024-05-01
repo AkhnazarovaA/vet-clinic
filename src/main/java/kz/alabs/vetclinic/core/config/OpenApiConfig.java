@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
         info = @Info(
-                title = "Vet Clinic REST API", version = "1.0",
+                title = "Pet Clinic REST API", version = "1.0",
                 description = "Application used for monitoring and managing vet and pet data",
                 contact = @Contact(
                         name = "Akhnazarova Ainura",

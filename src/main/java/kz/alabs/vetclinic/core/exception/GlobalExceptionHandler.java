@@ -17,7 +17,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.Objects;
 
-import static kz.alabs.vetclinic.core.util.Constants.*;
+import static kz.alabs.vetclinic.core.util.Constants.TRACE;
+import static kz.alabs.vetclinic.core.util.Constants.VALIDATION_ERROR;
 
 @Slf4j
 @RestControllerAdvice
@@ -28,13 +29,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex,
-            HttpHeaders headers,
-            HttpStatusCode statusCode,
-            WebRequest request
-    ) {
-        log.error(METHOD_ARGUMENT_NOT_VALID, ex);
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatusCode statusCode,
+                                                                  WebRequest request) {
+        log.error("Method argument is not valid", ex);
         final ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY.value(), VALIDATION_ERROR);
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
             errorResponse.addValidationError(fieldError.getField(), fieldError.getDefaultMessage());
@@ -44,49 +43,36 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NoSuchElementFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<Object> handleNoSuchElementFoundException(
-            NoSuchElementFoundException ex,
-            WebRequest request
-    ) {
-        log.error(NOT_FOUND, ex);
+    public ResponseEntity<Object> handleNoSuchElementFoundException(NoSuchElementFoundException ex, WebRequest request) {
+        log.error("Object has not found", ex);
         return buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(ElementAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<Object> handleElementAlreadyExistsException(
-            ElementAlreadyExistsException ex,
-            WebRequest request
-    ) {
-        log.error(ALREADY_EXISTS, ex);
+    public ResponseEntity<Object> handleElementAlreadyExistsException(ElementAlreadyExistsException ex, WebRequest request) {
+        log.error("Object is already existed", ex);
         return buildErrorResponse(ex, HttpStatus.CONFLICT, request);
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<Object> handleAllUncaughtException(
-            Exception ex,
-            WebRequest request
-    ) {
+    public ResponseEntity<Object> handleAllUncaughtException(Exception ex, WebRequest request) {
         log.error(ex.getMessage(), ex);
         return buildErrorResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
 
-    private ResponseEntity<Object> buildErrorResponse(
-            Exception ex,
-            HttpStatusCode statusCode,
-            WebRequest request
-    ) {
+    private ResponseEntity<Object> buildErrorResponse(Exception ex,
+                                                      HttpStatusCode statusCode,
+                                                      WebRequest request) {
         return buildErrorResponse(ex, ex.getMessage(), statusCode, request);
     }
 
-    private ResponseEntity<Object> buildErrorResponse(
-            Exception ex,
-            String message,
-            HttpStatusCode statusCode,
-            WebRequest request
-    ) {
+    private ResponseEntity<Object> buildErrorResponse(Exception ex,
+                                                      String message,
+                                                      HttpStatusCode statusCode,
+                                                      WebRequest request) {
         final ErrorResponse errorResponse = new ErrorResponse(statusCode.value(), message);
         if (printStackTrace && isTraceOn(request)) {
             errorResponse.setStackTrace(ExceptionUtils.getStackTrace(ex));
@@ -107,8 +93,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             Object body,
             HttpHeaders headers,
             HttpStatusCode statusCode,
-            WebRequest request
-    ) {
+            WebRequest request) {
         return buildErrorResponse(ex, statusCode, request);
     }
 

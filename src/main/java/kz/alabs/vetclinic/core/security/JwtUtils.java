@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-import static kz.alabs.vetclinic.core.util.Constants.*;
-
 @Slf4j
 @Component
 public class JwtUtils {
@@ -39,15 +37,15 @@ public class JwtUtils {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
-            log.error(INVALID_JWT_SIGN, e.getMessage());
+            log.error("Jwt sign is invalid ", e.getMessage());
         } catch (MalformedJwtException e) {
-            log.error(INVALID_JWT_TOKEN, e.getMessage());
+            log.error("Jwt token is invalid", e.getMessage());
         } catch (ExpiredJwtException e) {
-            log.error(JWT_EXPIRED, e.getMessage());
+            log.error("Jwt is expired", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            log.error(JWT_UNSUPPORTED, e.getMessage());
+            log.error("Jwt is unsupported", e.getMessage());
         } catch (IllegalArgumentException e) {
-            log.error(JWT_EMPTY, e.getMessage());
+            log.error("Jwt is empty", e.getMessage());
         }
         return false;
     }

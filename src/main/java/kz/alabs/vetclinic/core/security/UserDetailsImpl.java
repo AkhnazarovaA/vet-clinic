@@ -1,13 +1,16 @@
 package kz.alabs.vetclinic.core.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import kz.alabs.vetclinic.user.model.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -24,6 +27,18 @@ public class UserDetailsImpl implements UserDetails {
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
+
+    public static UserDetailsImpl build(User user) {
+        final List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getType().name()))
+                .toList();
+
+        return new UserDetailsImpl(
+                user.getId(),
+                user.getUsername(),
+                user.getPassword(),
+                authorities);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
