@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: vet-clinic
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate.format_sql: true
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    enabled: true
+    placeholderReplacement: false
+    baseline-on-migrate: true
+  security:
+    jwtSecret: ${JWT_SECRET}
+    jwtExpirationMs: 1800000
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 10MB
+
+server:
+  port: 8080
