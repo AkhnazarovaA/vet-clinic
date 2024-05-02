@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "3d2a4408-bd56-45ff-bac3-c97e1bf637a7",
+		"_postman_id": "c6352ed5-3f7b-4662-b806-65461d31c635",
 		"name": "vet-clinic",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "31297557"
@@ -46,7 +46,7 @@
 							"script": {
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);\r",
-									"postman.setEnvironmentVariable(\"access_token\", jsonData.data.token);"
+									"postman.setEnvironmentVariable(\"access_token\", jsonData.token);"
 								],
 								"type": "text/javascript",
 								"packages": {}
