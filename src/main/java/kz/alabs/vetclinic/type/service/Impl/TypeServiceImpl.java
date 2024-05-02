@@ -41,6 +41,18 @@ public class TypeServiceImpl implements TypeService {
 
     @Override
     @Transactional(readOnly = true)
+    public Page<TypeResponse> findAll(Pageable pageable) {
+        final Page<TypeResponse> types = typeRepository.findAll(pageable)
+                .map(typeResponseMapper::toDto);
+
+        if (types.isEmpty()) {
+            throw new NoSuchElementFoundException(NOT_FOUND_RECORD);
+        }
+        return types;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public TypeResponse findById(long id) {
         return typeRepository.findById(id)
                 .map(typeResponseMapper::toDto)
@@ -52,18 +64,6 @@ public class TypeServiceImpl implements TypeService {
     public Type getById(long id) {
         return typeRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementFoundException(NOT_FOUND_TYPE));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<TypeResponse> findAll(Pageable pageable) {
-        final Page<TypeResponse> types = typeRepository.findAll(pageable)
-                .map(typeResponseMapper::toDto);
-
-        if (types.isEmpty()) {
-            throw new NoSuchElementFoundException(NOT_FOUND_RECORD);
-        }
-        return types;
     }
 
     @Override

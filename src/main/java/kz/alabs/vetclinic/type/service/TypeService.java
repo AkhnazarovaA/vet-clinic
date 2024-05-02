@@ -10,11 +10,11 @@ public interface TypeService {
 
     TypeResponse create(TypeRequest request);
 
+    Page<TypeResponse> findAll(Pageable pageable);
+
     TypeResponse findById(long id);
 
     Type getById(long id);
-
-    Page<TypeResponse> findAll(Pageable pageable);
 
     TypeResponse update(TypeRequest request);
 

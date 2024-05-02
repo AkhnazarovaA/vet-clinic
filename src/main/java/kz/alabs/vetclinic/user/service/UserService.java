@@ -11,15 +11,13 @@ public interface UserService {
 
     UserResponse create(UserRequest request);
 
+    Page<UserResponse> findAll(Pageable pageable);
+
     UserResponse findById(long id);
 
     User getById(long id);
 
-    Page<UserResponse> findAll(Pageable pageable);
-
     UserResponse update(ProfileRequest request);
-
-    UserResponse updateFullName(ProfileRequest request);
 
     void deleteById(long id);
 

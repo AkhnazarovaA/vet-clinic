@@ -29,16 +29,10 @@ public class PetController {
         return petService.create(request);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping
     @PreAuthorize("hasRole(T(kz.alabs.vetclinic.core.enums.RoleType).ROLE_USER)")
-    public PetResponse findById(@PathVariable long id) {
-        return petService.findById(id);
-    }
-
-    @GetMapping("/users/{userId}")
-    @PreAuthorize("hasRole(T(kz.alabs.vetclinic.core.enums.RoleType).ROLE_USER)")
-    public List<PetResponse> findAllByUserId(@PathVariable long userId) {
-        return petService.findAllByUserId(userId);
+    public Page<PetResponse> findAll(Pageable pageable) {
+        return petService.findAll(pageable);
     }
 
     @PostMapping("/types")
@@ -47,10 +41,16 @@ public class PetController {
         return petService.findAllByType(request);
     }
 
-    @GetMapping
+    @GetMapping("/users/{userId}")
     @PreAuthorize("hasRole(T(kz.alabs.vetclinic.core.enums.RoleType).ROLE_USER)")
-    public Page<PetResponse> findAll(Pageable pageable) {
-        return petService.findAll(pageable);
+    public List<PetResponse> findAllByUserId(@PathVariable long userId) {
+        return petService.findAllByUserId(userId);
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole(T(kz.alabs.vetclinic.core.enums.RoleType).ROLE_USER)")
+    public PetResponse findById(@PathVariable long id) {
+        return petService.findById(id);
     }
 
     @PutMapping

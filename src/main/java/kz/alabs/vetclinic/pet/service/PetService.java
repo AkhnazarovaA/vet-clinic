@@ -13,13 +13,13 @@ public interface PetService {
 
     PetResponse create(PetRequest request);
 
-    PetResponse findById(long id);
-
     Page<PetResponse> findAll(Pageable pageable);
+
+    Map<String, Long> findAllByType(TypeSetRequest types);
 
     List<PetResponse> findAllByUserId(long userId);
 
-    Map<String, Long> findAllByType(TypeSetRequest types);
+    PetResponse findById(long id);
 
     PetResponse update(PetRequest request);
 

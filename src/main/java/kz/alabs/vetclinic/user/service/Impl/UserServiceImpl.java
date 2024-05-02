@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static kz.alabs.vetclinic.core.util.Constants.*;
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByUsernameIgnoreCase(request.getUsername())) {
             throw new ElementAlreadyExistsException(ALREADY_EXISTS_USER);
         }
-        final Set<Role> roles = new HashSet<>(Arrays.asList(new Role(1L, RoleType.ROLE_USER)));
+        final Set<Role> roles = new HashSet<>(List.of(new Role(1L, RoleType.ROLE_USER)));
 
         if (
                 request.getRoles() != null
@@ -62,6 +63,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
+    public Page<UserResponse> findAll(Pageable pageable) {
+        final Page<UserResponse> users = userRepository.findAll(pageable)
+                .map(userResponseMapper::toDto);
+
+        if (users.isEmpty()) {
+            throw new NoSuchElementFoundException(NOT_FOUND_RECORD);
+        }
+        return users;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public UserResponse findById(long id) {
         return userRepository.findById(id)
                 .map(userResponseMapper::toDto)
@@ -73,18 +86,6 @@ public class UserServiceImpl implements UserService {
     public User getById(long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementFoundException(NOT_FOUND_USER));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<UserResponse> findAll(Pageable pageable) {
-        final Page<UserResponse> users = userRepository.findAll(pageable)
-                .map(userResponseMapper::toDto);
-
-        if (users.isEmpty()) {
-            throw new NoSuchElementFoundException(NOT_FOUND_RECORD);
-        }
-        return users;
     }
 
     @Override
@@ -101,19 +102,6 @@ public class UserServiceImpl implements UserService {
         } else {
             user.removeRole(new Role(2L, RoleType.ROLE_ADMIN));
         }
-
-        user.setFirstName(WordUtils.capitalizeFully(request.getFirstName()));
-        user.setLastName(WordUtils.capitalizeFully(request.getLastName()));
-        userRepository.save(user);
-        log.info("User has been updated");
-        return userResponseMapper.toDto(user);
-    }
-
-    @Override
-    @Transactional
-    public UserResponse updateFullName(ProfileRequest request) {
-        final User user = userRepository.findById(request.getId())
-                .orElseThrow(() -> new NoSuchElementFoundException(NOT_FOUND_USER));
 
         user.setFirstName(WordUtils.capitalizeFully(request.getFirstName()));
         user.setLastName(WordUtils.capitalizeFully(request.getLastName()));

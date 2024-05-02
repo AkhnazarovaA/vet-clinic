@@ -19,8 +19,8 @@ spring:
     placeholderReplacement: false
     baseline-on-migrate: true
   security:
-    jwtSecret: ${JWT_SECRET:SALT}
-    jwtExpirationMs: 1800000
+    jwt-secret: ${JWT_SECRET:SALT}
+    jwt-expiration-ms: 1800000
   servlet:
     multipart:
       max-file-size: 1MB

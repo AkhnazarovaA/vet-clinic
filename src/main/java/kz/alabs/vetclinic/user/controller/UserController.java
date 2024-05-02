@@ -26,28 +26,22 @@ public class UserController {
         return userService.create(request);
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole(T(kz.alabs.vetclinic.core.enums.RoleType).ROLE_USER)")
-    public UserResponse findById(@PathVariable long id) {
-        return userService.findById(id);
-    }
-
     @GetMapping
     @PreAuthorize("hasRole(T(kz.alabs.vetclinic.core.enums.RoleType).ROLE_ADMIN)")
     public Page<UserResponse> findAll(Pageable pageable) {
         return userService.findAll(pageable);
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole(T(kz.alabs.vetclinic.core.enums.RoleType).ROLE_USER)")
+    public UserResponse findById(@PathVariable long id) {
+        return userService.findById(id);
+    }
+
     @PutMapping
     @PreAuthorize("hasRole(T(kz.alabs.vetclinic.core.enums.RoleType).ROLE_USER)")
     public UserResponse update(@Valid @RequestBody ProfileRequest request) {
         return userService.update(request);
-    }
-
-    @PutMapping("/profile")
-    @PreAuthorize("hasRole(T(kz.alabs.vetclinic.core.enums.RoleType).ROLE_USER)")
-    public UserResponse updateFullName(@Valid @RequestBody ProfileRequest request) {
-        return userService.updateFullName(request);
     }
 
     @DeleteMapping("/{id}")

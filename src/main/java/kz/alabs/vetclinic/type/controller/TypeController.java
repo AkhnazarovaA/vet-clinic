@@ -25,16 +25,16 @@ public class TypeController {
         return typeService.create(request);
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole(T(kz.alabs.vetclinic.core.enums.RoleType).ROLE_USER)")
-    public TypeResponse findById(@PathVariable long id) {
-        return typeService.findById(id);
-    }
-
     @GetMapping
     @PreAuthorize("hasRole(T(kz.alabs.vetclinic.core.enums.RoleType).ROLE_USER)")
     public Page<TypeResponse> findAll(Pageable pageable) {
         return typeService.findAll(pageable);
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole(T(kz.alabs.vetclinic.core.enums.RoleType).ROLE_USER)")
+    public TypeResponse findById(@PathVariable long id) {
+        return typeService.findById(id);
     }
 
     @PutMapping

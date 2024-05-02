@@ -49,14 +49,6 @@ public class PetServiceImpl implements PetService {
 
     @Override
     @Transactional(readOnly = true)
-    public PetResponse findById(long id) {
-        return petRepository.findById(id)
-                .map(petResponseMapper::toDto)
-                .orElseThrow(() -> new NoSuchElementFoundException(NOT_FOUND_PET));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public Page<PetResponse> findAll(Pageable pageable) {
         final Page<PetResponse> pets = petRepository.findAll(pageable)
                 .map(petResponseMapper::toDto);
@@ -65,6 +57,14 @@ public class PetServiceImpl implements PetService {
             throw new NoSuchElementFoundException(NOT_FOUND_RECORD);
         }
         return pets;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<String, Long> findAllByType(TypeSetRequest types) {
+        return petRepository.findAll().stream()
+                .filter(pet -> types.getIds().isEmpty() || types.getIds().contains(pet.getType().getId()))
+                .collect(Collectors.groupingBy(x -> x.getType().getName(), Collectors.counting()));
     }
 
     @Override
@@ -81,10 +81,10 @@ public class PetServiceImpl implements PetService {
 
     @Override
     @Transactional(readOnly = true)
-    public Map<String, Long> findAllByType(TypeSetRequest types) {
-        return petRepository.findAll().stream()
-                .filter(pet -> types.getIds().isEmpty() || types.getIds().contains(pet.getType().getId()))
-                .collect(Collectors.groupingBy(x -> x.getType().getName(), Collectors.counting()));
+    public PetResponse findById(long id) {
+        return petRepository.findById(id)
+                .map(petResponseMapper::toDto)
+                .orElseThrow(() -> new NoSuchElementFoundException(NOT_FOUND_PET));
     }
 
     @Override
